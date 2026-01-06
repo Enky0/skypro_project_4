@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        {% for user in user_list %}
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ user.email }}</h4>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}">
+                    {% endif %}
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>Телефон: {{ user.phone }}</li>
+                        <li>Страна: {{ user.country }}</li>
+                        <li>Заблокирован: {{ user.is_blocked }}</li>
+                        <li>Персонал: {{ user.is_staff }}</li>
+                        <li>Суперпользователь: {{ user.is_superuser }}</li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'user_detail' user.id %}"
+                       class="btn btn-lg btn-block btn-outline-primary mt-auto">Открыть полностью</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
