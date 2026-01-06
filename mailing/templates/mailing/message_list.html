@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Все сообщения</h1>
+
+    <div class="row">
+        {% for message in message_list %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ message.subject }}</h5>
+                    <p class="card-text">{{ message.body|truncatechars:50 }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'message_detail' message.id %}"
+                       class="btn btn-lg btn-block btn-outline-primary mt-auto">Посмотреть полностью</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Сообщений пока нет.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<p>Дата начала рассылки: {{ mailing.start_time }}</p>
+<p>Дата конца рассылки: {{ mailing.end_time }}</p>
+<p>Статус рассылки: {{ mailing.status }}</p>
+<p>Тема сообщения: {{ mailing.message.subject }}</p>
+<p class="card-text">Получатели:</p>
+{% with filtered_recipients=mailing.recipients.filter owner=request.user %}
+    {% for recipient in filtered_recipients %}
+        <p class="card-text">{{ recipient.initials }}</p>
+    {% endfor %}
+{% endwith %}
+
+{% if user == mailing.owner %}
+<p>
+    <a href="{% url 'mailing_edit' pk=mailing.id %}" class="text-primary">
+        Редактировать рассылку
+    </a>
+</p>
+<p>
+    <a href="{% url 'mailing_delete' pk=mailing.id %}" class="text-primary">
+        Удалить рассылку
+    </a>
+</p>
+{% if not request.user.is_blocked %}
+<form method="post" action="{% url 'send_mailing' mailing.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Отправить рассылку сейчас</button>
+</form>
+{% else %}
+<div class="alert alert-warning">
+    Ваш аккаунт заблокирован. Отправка рассылок невозможна.
+</div>
+{% endif %}
+
+{% if mailing.status == mailing.STATUS_PAUSED and not request.user.is_blocked %}
+    <form method="post" action="{% url 'unpause_mailing' mailing.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Возобновить рассылку</button>
+    </form>
+{% elif mailing.status == mailing.STATUS_PAUSED and request.user.is_blocked %}
+    <div class="alert alert-danger">
+        Ваш аккаунт заблокирован. Возобновление рассылок невозможно.
+    </div>
+{% endif %}
+
+{% endif %}
+
+{% if perms.mailing.can_stop_mailings %}
+<form method="post" action="{% url 'pause_mailing' mailing.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning">
+        {% if mailing.status == mailing.STATUS_PAUSED %}
+            Рассылка уже приостановлена
+        {% else %}
+            Приостановить рассылку
+        {% endif %}
+    </button>
+</form>
+{% endif %}
+
+{% endblock %}

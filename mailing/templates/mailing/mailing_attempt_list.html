@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Все попытки рассылок</h1>
+
+    <div class="row">
+        {% for attempt in attempts %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ attempt.mailing.message.subject }}</h5>
+                    <p class="card-text">{{ attempt.attempt_date|date:"d.m.Y H:i:s" }}</p>
+                    <p class="card-text">{{ attempt.server_response }}</p>
+                </div>
+                <div class="card-footer">
+                    <h3>{{ attempt.get_status_display }}</h3>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Попыток рассылки пока нет.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

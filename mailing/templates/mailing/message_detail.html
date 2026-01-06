@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<p>Название: {{ message.subject }}</p>
+<p>Описание: {{ message.body }}</p>
+{% if user == message.owner %}
+<p>
+    <a href="{% url 'message_edit' pk=message.id %}" class="text-primary">
+        Редактировать сообщение
+    </a>
+</p>
+<p>
+    <a href="{% url 'message_delete' pk=message.id %}" class="text-primary">
+        Удалить сообщение
+    </a>
+</p>
+{% endif %}
+{% endblock %}

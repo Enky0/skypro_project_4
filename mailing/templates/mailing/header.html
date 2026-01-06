@@ -1,0 +1,61 @@
+<header>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <h5 class="my-0 mr-md-auto font-weight-normal">Mailing</h5>
+
+        <nav class="ms-5">
+            <a class="p-2 btn btn-outline-primary" href="{% url 'home' %}">Главная</a>
+            {% if user.is_authenticated and not user.is_blocked %}
+            <div class="dropdown show d-inline">
+                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="createDropdown"
+                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Создать
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="createDropdown">
+                    <a class="dropdown-item" href="{% url 'message_new' %}">Новое письмо</a>
+                    <a class="dropdown-item" href="{% url 'recipient_new' %}">Новый получатель</a>
+                    <a class="dropdown-item" href="{% url 'mailing_new' %}">Новая рассылка</a>
+                </div>
+            </div>
+            <div class="dropdown show d-inline">
+                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="listDropdown"
+                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Показать
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="listDropdown">
+                    <a class="dropdown-item" href="{% url 'message_list' %}">Все письма</a>
+                    <a class="dropdown-item" href="{% url 'recipient_list' %}">Все получатели</a>
+                    <a class="dropdown-item" href="{% url 'mailing_list' %}">Все рассылки</a>
+                    <a class="dropdown-item" href="{% url 'mailing_attempts' %}">Попытки рассылки</a>
+                </div>
+            </div>
+            {% endif %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'statistics' %}">Статистика</a>
+
+            {% if user.is_authenticated %}
+            <form action="{% url 'account_logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="p-2 btn btn-outline-primary">Выйти</button>
+            </form>
+            <div class="dropdown show d-inline">
+                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="profileDropdown"
+                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Профиль
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="ProfileDropdown">
+                    <a class="dropdown-item" href="{% url 'user_detail' user.id %}">Мой профиль</a>
+                    <a class="dropdown-item" href="{% url 'user_edit' user.id %}">Редактировать мой профиль</a>
+                </div>
+            </div>
+            {% else %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'account_login' %}">Войти</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'account_signup' %}">Регистрация</a>
+            {% endif %}
+            {% if user.is_authenticated and perms.users.can_view_all_users%}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'user_list' %}">Панель менеджера</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>

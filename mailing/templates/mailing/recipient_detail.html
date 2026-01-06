@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<p>ФИО получателя: {{ recipient.initials }}</p>
+<p>Электронная почта: {{ recipient.email }}</p>
+<p>Комментарий: {{ recipient.commentary }}</p>
+{% if user == recipient.owner %}
+<p>
+    <a href="{% url 'recipient_edit' pk=recipient.id %}" class="text-primary">
+        Редактировать получателя
+    </a>
+</p>
+<p>
+    <a href="{% url 'recipient_delete' pk=recipient.id %}" class="text-primary">
+        Удалить получателя
+    </a>
+</p>
+{% endif %}
+{% endblock %}
