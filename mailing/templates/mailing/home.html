@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Всего рассылок</h5>
+                    <p class="card-text">{{ total_mailings }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Активных рассылок</h5>
+                    <p class="card-text">{{ active_mailings }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Всего получателей</h5>
+                    <p class="card-text">{{ unique_recipients }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

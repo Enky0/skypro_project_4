@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Все рассылки</h1>
+
+    <div class="row">
+        {% for mailing in mailings %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Тема сообщения: {{ mailing.message.subject }}</h5>
+                    {% with filtered_recipients=mailing.recipients.filter owner=request.user %}
+                        {% for recipient in filtered_recipients %}
+                            <p class="card-text">ФИО получателя: {{ recipient.initials }}</p>
+                        {% endfor %}
+                    {% endwith %}
+                    <p class="card-text">Статус рассылки: {{ mailing.status }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'mailing_detail' mailing.id %}"
+                       class="btn btn-lg btn-block btn-outline-primary mt-auto">Посмотреть полностью</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Рассылок пока нет.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

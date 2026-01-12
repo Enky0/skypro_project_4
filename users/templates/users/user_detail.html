@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Mailing{% endblock %}
+
+{% block content %}
+<p>Email: {{user.email}}</p>
+{% if user.avatar %}
+Аватар:
+<img src="{{ user.avatar.url }}">
+{% endif %}
+<p>Телефон: {{ user.phone }}</p>
+<p>Страна: {{ user.country }}</p>
+{% if perms.users.can_view_all_users %}
+<p>Заблокирован: {{ user.is_blocked }}</p>
+<p>Персонал: {{ user.is_staff }}</p>
+<p>Суперпользователь: {{ user.is_superuser }}</p>
+<p>
+    <a href="{% url 'user_mailing_list' user.id %}" class="text-primary">
+        Рассылки пользователя
+    </a>
+</p>
+<p>
+    <a href="{% url 'user_recipient_list' user.id %}" class="text-primary">
+        Клиенты пользователя
+    </a>
+</p>
+{% if not user.is_blocked %}
+<form method="post" action="{% url 'block_user' user.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Заблокировать пользователя</button>
+</form>
+{% else %}
+<form method="post" action="{% url 'unblock_user' user.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Разблокировать пользователя</button>
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}
